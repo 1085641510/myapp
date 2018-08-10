@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('demo:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('../config/debugConfig');
+const serverDebug = debug('app:server');
+const http = require('http');
+const moment = require('moment');
 let config = require('../config/serverConfig');
 
 /**
@@ -27,7 +29,7 @@ var server = http.createServer(app.callback());
  */
 
 server.listen(config.port || 3000);
-console.log(config.port,`server is runing`)
+
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -38,7 +40,7 @@ server.on('listening', onListening);
 
 function normalizePort(val) {
     var port = parseInt(val, 10);
-
+    
     if (isNaN(port)) {
         // named pipe
         return val;
@@ -89,5 +91,5 @@ function onListening() {
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
-    debug('Listening on ' + bind);
+    serverDebug( moment().format() + ' Listening on ' + bind);
 }
